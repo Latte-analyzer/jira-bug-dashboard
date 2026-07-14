@@ -1,0 +1,47 @@
+# Example: Filter tickets by Jira component
+# Good when your team uses components instead of labels
+
+user:
+  name: "<YOUR_NAME>"
+  email: "<YOUR_EMAIL>@mercedes-benz.com"
+  name_variants:
+    - "<English Name>"
+    - "<jira.username>"
+    - "<中文名>"
+
+jira:
+  base_url: "https://mercedes-benz.atlassian.net"
+  api_token_env: "JIRA_API_TOKEN"
+
+filter:
+  # Replace with YOUR project and components
+  jql: |
+    project = APRICOT
+    AND component in ("<Component1>", "<Component2>")
+    AND status not in (Closed, Done, Resolved)
+
+triage:
+  new_ticket_days: 3
+  stale_days: 5
+  focus_statuses:
+    - "Open"
+    - "To Do"
+    - "In Progress"
+  non_focus_statuses:
+    - "To Verify"
+    - "Verifying"
+    - "MR-Review"
+    - "PO Review"
+    - "Fixed"
+    - "Rejected"
+    - "Cancelled"
+    - "In Verification"
+
+fields:
+  severity_field: "customfield_10037"
+  a_level_field: null  # Set null if your instance doesn't have this field
+
+output:
+  directory: "~/loop-outputs/jira-triage"
+  filename_pattern: "{date}-<Component>-BUG.html"
+  open_in_browser: true

@@ -1,0 +1,47 @@
+# Example: Filter tickets assigned to you
+# Simplest setup — no labels or components needed
+
+user:
+  name: "<YOUR_NAME>"
+  email: "<YOUR_EMAIL>@mercedes-benz.com"
+  name_variants:
+    - "<English Name>"
+    - "<jira.username>"
+    - "<中文名>"
+
+jira:
+  base_url: "https://mercedes-benz.atlassian.net"
+  api_token_env: "JIRA_API_TOKEN"
+
+filter:
+  # currentUser() auto-resolves to your login — no name needed
+  jql: |
+    project = APRICOT
+    AND assignee = currentUser()
+    AND status not in (Closed, Done, Resolved)
+
+triage:
+  new_ticket_days: 3
+  stale_days: 3
+  focus_statuses:
+    - "Open"
+    - "To Do"
+    - "In Progress"
+  non_focus_statuses:
+    - "To Verify"
+    - "Verifying"
+    - "MR-Review"
+    - "PO Review"
+    - "Fixed"
+    - "Rejected"
+    - "Cancelled"
+    - "In Verification"
+
+fields:
+  severity_field: "customfield_10037"
+  a_level_field: "customfield_11451"
+
+output:
+  directory: "~/loop-outputs/jira-triage"
+  filename_pattern: "{date}-MyBugs.html"
+  open_in_browser: true

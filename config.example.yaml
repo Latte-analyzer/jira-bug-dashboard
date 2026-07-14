@@ -1,0 +1,91 @@
+# ============================================================
+# Jira Bug Dashboard — Personal Configuration
+# ============================================================
+# Copy this file to: ~/.claude/skills/jira-bug-dashboard/config.yaml
+# Then edit with your own info.
+# ============================================================
+
+# === YOUR PERSONAL INFO ===
+# Used for triage: detecting tickets assigned to you or @mentioning you
+user:
+  name: "Your Name"                      # Display name in Jira
+  email: "your.email@company.com"        # Jira login email
+  name_variants:                          # All ways colleagues might @mention you
+    - "Your Name"                         # English full name
+    - "your.name"                         # Jira username portion
+    - "你的中文名"                         # Chinese name (if applicable)
+
+# === JIRA CONNECTION ===
+jira:
+  base_url: "https://your-company.atlassian.net"
+  # Option 1 (recommended): Store token in environment variable
+  api_token_env: "JIRA_API_TOKEN"
+  # Option 2 (not recommended): Hardcode token here
+  # api_token: "ATATT3xFf..."
+  #
+  # To create a token: https://id.atlassian.com/manage-profile/security/api-tokens
+
+# === TICKET FILTER ===
+# JQL query that selects the tickets YOU care about
+filter:
+  jql: |
+    labels in ("your_label_1", "your_label_2")
+    AND status not in (Closed, Done, Resolved)
+  #
+  # Common JQL patterns:
+  # By label:      labels in ("team_feature_yourname") AND status not in (Closed, Done)
+  # By component:  project = PROJ AND component = "YourComponent" AND status not in (Closed)
+  # By assignee:   project = PROJ AND assignee = currentUser() AND status not in (Closed)
+  # By sprint:     project = PROJ AND sprint in openSprints() AND assignee = currentUser()
+  # By filter:     filter = 12345
+  #
+  # Tip: Test your JQL in Jira's search bar first!
+
+# === TRIAGE RULES ===
+# Tune these thresholds to match your workflow
+triage:
+  new_ticket_days: 3          # Tickets created within N days → marked as "🔥 New"
+  stale_days: 3               # No activity for N days → marked as "⏰ Needs push"
+  focus_statuses:             # Statuses requiring YOUR active attention
+    - "Open"
+    - "To Do"
+    - "In Progress"
+  non_focus_statuses:         # Statuses that are "in pipeline" (less urgent)
+    - "To Verify"
+    - "Verifying"
+    - "MR-Review"
+    - "PO Review"
+    - "Fixed"
+    - "Rejected"
+    - "Cancelled"
+    - "In Verification"
+
+# === NON-FOCUS STATUS ACTIONS ===
+# What's the next expected action for each non-focus status?
+# These show as hints in the dashboard
+non_focus_actions:
+  "To Verify": "等 staging 验证后 Close/Reopen"
+  "Verifying": "验证中，等测试结果"
+  "MR-Review": "代码评审中，等合入"
+  "Fixed": "已修复待验证"
+  "In Verification": "验证中"
+  "Rejected": "确认拒绝理由"
+  "PO Review": "PO 评审中"
+  "Cancelled": "已取消"
+
+# === CUSTOM FIELDS ===
+# These IDs vary per Jira instance. Find yours in:
+# Jira Settings → Issues → Custom Fields → click field → ID in URL
+fields:
+  severity_field: "customfield_10037"    # Severity / VoCA field
+  # severity_values:                     # Optional: map raw values to display names
+  #   "2 - Critical": "Critical"
+  #   "3 - Major": "Major"
+  #   "4 - Normal": "Normal"
+  a_level_field: "customfield_11451"     # A-level field (optional, set null to skip)
+
+# === OUTPUT ===
+output:
+  directory: "~/loop-outputs/jira-triage"
+  filename_pattern: "{date}-{project}-BUG.html"  # {date} = YYYY-MM-DD, {project} = your label
+  open_in_browser: true                           # Auto-open after generation
