@@ -21,6 +21,9 @@ This Claude Code skill fetches your Jira tickets via REST API, triages them by P
 1. **Claude Code** installed ([docs](https://docs.anthropic.com/en/docs/claude-code))
 2. **Jira API Token** ([create here](https://id.atlassian.com/manage-profile/security/api-tokens))
 3. A Jira project with tickets you want to track
+4. (Optional) MCP servers for extended capabilities:
+   - [飞书 MCP 配置](docs/mcp-feishu-setup.md) — 搜索/读取飞书文档、发消息
+   - [Atlassian MCP 配置](docs/mcp-atlassian-setup.md) — 交互式查询 Jira/Confluence
 
 ### Installation (3 steps)
 
@@ -254,14 +257,15 @@ Use the skill as a template for a cron job that generates dashboards for the who
 
 ```
 jira-bug-dashboard/
-├── README.md              ← You are here
-├── config.example.yaml    ← Template config (copy & edit)
+├── README.md                    ← You are here
+├── config.example.yaml          ← Template config (copy & edit)
 ├── skill/
-│   └── skill.md           ← The Claude Code skill definition
+│   └── skill.md                 ← The Claude Code skill definition
 ├── docs/
-│   ├── preview.png        ← Dashboard screenshot
-│   ├── setup-guide.md     ← Detailed setup walkthrough
-│   └── faq.md             ← Extended FAQ
+│   ├── setup-guide.md           ← Detailed setup walkthrough
+│   ├── mcp-feishu-setup.md      ← 飞书 MCP 配置教程
+│   ├── mcp-atlassian-setup.md   ← Atlassian MCP 配置教程（Jira/Confluence）
+│   └── faq.md                   ← Extended FAQ
 └── examples/
     ├── config-by-label.yaml
     ├── config-by-component.yaml
